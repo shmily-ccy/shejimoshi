@@ -18,7 +18,6 @@ public class TankFrame extends Frame {
         setTitle("tank war");
         setVisible(true);
         addKeyListener(new MyKeyListener());
-
         //windows关闭窗口的时候调用
         addWindowListener(new WindowAdapter() {
             @Override
