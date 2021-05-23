@@ -11,7 +11,6 @@ public class T {
         f.setSize(800,600);
         f.setResizable(false);
         f.setVisible(true);
-        f.setTitle("tank war");
         //添加window的监听器
         f.addWindowListener(new WindowAdapter() {
             @Override
