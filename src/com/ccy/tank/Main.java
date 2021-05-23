@@ -6,7 +6,11 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         TankFrame tf=new TankFrame();
+        while (true){
+            Thread.sleep(50);//主线程睡眠50毫秒
+            tf.repaint();
+        }
     }
 }
