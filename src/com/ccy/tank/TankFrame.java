@@ -23,9 +23,6 @@ public class TankFrame extends Frame {
         g.fillRect(200,200,50,50);
     }
 
-    public static void main(String[] args) {
-        TankFrame tf=new TankFrame();
-    }
 }
 
 
