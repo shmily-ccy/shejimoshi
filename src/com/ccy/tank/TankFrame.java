@@ -8,9 +8,13 @@ import java.awt.event.WindowEvent;
 
 public class TankFrame extends Frame {
 
-    int x=200,y=200;
-    Dir dir=Dir.DOWN;
-    final int SPEED=10;
+//    int x=200,y=200;
+//    Dir dir=Dir.DOWN;
+//    final int SPEED=10;
+    //主站坦克
+    Tank myTank=new Tank(200,200,Dir.DOWN);
+
+
 
     public TankFrame(){
         setSize(800,600);
@@ -33,26 +37,28 @@ public class TankFrame extends Frame {
      */
     @Override
     public void paint(Graphics g) {
+        //画笔交给tank,由坦克自己去画自己
+        myTank.paint(g);
         //每次最小化窗口,就会进行移动,所以需要不断的调用这个方法(刷新)
         System.out.println("paint");
-        g.fillRect(x,y,50,50);
-        switch (dir){
-            case LEFT:
-                x-=SPEED;
-                break;
-            case RIGHT:
-                x+=SPEED;
-                break;
-            case UP:
-                y-=SPEED;
-                break;
-            case DOWN:
-                y+=SPEED;
-                break;
-            default:
-                break;
-
-        }
+//        g.fillRect(x,y,50,50);
+//        switch (dir){
+//            case LEFT:
+//                x-=SPEED;
+//                break;
+//            case RIGHT:
+//                x+=SPEED;
+//                break;
+//            case UP:
+//                y-=SPEED;
+//                break;
+//            case DOWN:
+//                y+=SPEED;
+//                break;
+//            default:
+//                break;
+//
+//        }
     }
 
     /**
@@ -90,11 +96,14 @@ public class TankFrame extends Frame {
             setMainTankDir();
         }
 
+        /**
+         * 坦克设定方向
+         */
         private void setMainTankDir() {
-            if(bL) dir=Dir.LEFT;
-            if(bU) dir=Dir.UP;
-            if(bR) dir=Dir.RIGHT;
-            if(bD) dir=Dir.DOWN;
+            if(bL) myTank.setDir(Dir.LEFT);
+            if(bU) myTank.setDir(Dir.UP);
+            if(bR) myTank.setDir(Dir.RIGHT);
+            if(bD) myTank.setDir(Dir.DOWN);
         }
 
         @Override
