@@ -5,7 +5,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
+/*
+弹出一个窗框
+ */
 public class TankFrame extends Frame {
 
 //    int x=200,y=200;
@@ -13,9 +15,11 @@ public class TankFrame extends Frame {
 //    final int SPEED=10;
     //主站坦克
     Tank myTank=new Tank(200,200,Dir.DOWN);
+    Bullet bullet=new Bullet(300,300,Dir.DOWN);//将子弹显示到窗口中
 
-
-
+    /**
+     * 坦克的大小结构
+     */
     public TankFrame(){
         setSize(800,600);
         setResizable(false);
@@ -39,8 +43,8 @@ public class TankFrame extends Frame {
     public void paint(Graphics g) {
         //画笔交给tank,由坦克自己去画自己
         myTank.paint(g);
+        bullet.paint(g);
         //每次最小化窗口,就会进行移动,所以需要不断的调用这个方法(刷新)
-        System.out.println("paint");
 //        g.fillRect(x,y,50,50);
 //        switch (dir){
 //            case LEFT:
@@ -97,13 +101,17 @@ public class TankFrame extends Frame {
         }
 
         /**
-         * 坦克设定方向
+         * 根据按键改变坦克设定方向
          */
         private void setMainTankDir() {
-            if(bL) myTank.setDir(Dir.LEFT);
-            if(bU) myTank.setDir(Dir.UP);
-            if(bR) myTank.setDir(Dir.RIGHT);
-            if(bD) myTank.setDir(Dir.DOWN);
+            if(!bR && !bL && !bU && !bD) myTank.setMoving(false);
+            else {
+                myTank.setMoving(true);
+                if (bL) myTank.setDir(Dir.LEFT);
+                if (bU) myTank.setDir(Dir.UP);
+                if (bR) myTank.setDir(Dir.RIGHT);
+                if (bD) myTank.setDir(Dir.DOWN);
+            }
         }
 
         @Override

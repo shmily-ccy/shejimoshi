@@ -1,21 +1,24 @@
 package com.ccy.tank;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.awt.*;
 
 /**
- * 坦克自身的属性,动作进行封装
+ * 子弹(炮弹)
  */
-public class Tank {
-    private int x,y;//坦克的坐标,移动的话,就是坐标的加减
-    private Dir dir;//坦克的方向
-    private static final int SPEED=10;//坦克移动速度
-    private boolean moving=false;//静止/移动,当为true的时候,对坦克进行位置上的改变,当我们按下某个键的时候为true;
+public class Bullet {
+    private static final int SPEED=1;//速度
+    private int x,y;//坐标位置
+    private static int WIDTH=30,HEIGHT=30;//子弹的大小,宽度和高度
+    private Dir dir;//子弹方向
 
-    public Tank(int x, int y, Dir dir) {
+    public Bullet(int x, int y, Dir dir) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+    }
+
+    public static int getSPEED() {
+        return SPEED;
     }
 
     public int getX() {
@@ -41,27 +44,21 @@ public class Tank {
     public void setDir(Dir dir) {
         this.dir = dir;
     }
-
-    public static int getSPEED() {
-        return SPEED;
-    }
-
-    public boolean isMoving() {
-        return moving;
-    }
-
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-    }
-
-    public void paint(Graphics g) {
-        g.fillRect(x,y,50,50);
+    /**
+     * 画出子弹自己
+     */
+    public void paint(Graphics g){
+        Color c=g.getColor();
+        g.setColor(Color.RED);//画笔的颜色
+        //子弹设置成圆的
+        g.fillOval(x,y,WIDTH,HEIGHT);
+        g.setColor(c);
         move();
 
     }
 
     private void move() {
-        if(!moving) return;
+      //  if(!moving) return;子弹是没有停止状态的
         switch (dir){
             case LEFT:
                 x-=SPEED;
