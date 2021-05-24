@@ -14,11 +14,11 @@ public class TankFrame extends Frame {
 //    Dir dir=Dir.DOWN;
 //    final int SPEED=10;
     //主站坦克
-    Tank myTank=new Tank(200,200,Dir.DOWN);
+    Tank myTank=new Tank(200,200,Dir.DOWN,this);//坦克的起始位置,以及方向
     Bullet bullet=new Bullet(300,300,Dir.DOWN);//将子弹显示到窗口中
 
     /**
-     * 坦克的大小结构
+     * 窗口属性
      */
     public TankFrame(){
         setSize(800,600);
@@ -130,6 +130,9 @@ public class TankFrame extends Frame {
                     break;
                 case KeyEvent.VK_RIGHT:
                     bR=false;
+                    break;
+                case KeyEvent.VK_CONTROL://抬起control键打出一颗子弹
+                    myTank.fire();
                     break;
                 default:
                     break;

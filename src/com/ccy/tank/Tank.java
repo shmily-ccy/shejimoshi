@@ -11,11 +11,13 @@ public class Tank {
     private Dir dir;//坦克的方向
     private static final int SPEED=10;//坦克移动速度
     private boolean moving=false;//静止/移动,当为true的时候,对坦克进行位置上的改变,当我们按下某个键的时候为true;
+    private TankFrame tf;//拥有了该窗口的引用,我们在创做坦克的时候,就可以将坦克随身携带的子弹也在画面中可以画出来(持有另外一个对象的引用)
 
-    public Tank(int x, int y, Dir dir) {
+    public Tank(int x, int y, Dir dir,TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.tf=tf;
     }
 
     public int getX() {
@@ -79,5 +81,9 @@ public class Tank {
                 break;
 
         }
+    }
+
+    public void fire() {
+        tf.bullet = new Bullet(this.x, this.y, this.dir);
     }
 }
