@@ -12,7 +12,8 @@ public class Tank {
     private static final int SPEED=10;//坦克移动速度
     private boolean moving=false;//静止/移动,当为true的时候,对坦克进行位置上的改变,当我们按下某个键的时候为true;
     private TankFrame tf;//拥有了该窗口的引用,我们在创做坦克的时候,就可以将坦克随身携带的子弹也在画面中可以画出来(持有另外一个对象的引用)
-
+    public static int WIDTH=ResourceMgr.tankD.getWidth();
+    public static int HEIGHT=ResourceMgr.tankD.getHeight();
     public Tank(int x, int y, Dir dir,TankFrame tf) {
         this.x = x;
         this.y = y;
@@ -57,9 +58,28 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        g.fillRect(x,y,50,50);
-        move();
+        //改成画图片,而不是方块
+        //ImageObserver是一个监听者,画进来的时候有事件发生
+       // g.drawImage(ResourceMgr.tankL,x,y,null);
+//        g.fillRect(x,y,50,50);
+       // move();
 
+        switch (dir){
+            case LEFT:
+                g.drawImage(ResourceMgr.tankL,x,y,null);
+                break;
+            case RIGHT:
+                g.drawImage(ResourceMgr.tankR,x,y,null);
+                break;
+            case DOWN:
+                g.drawImage(ResourceMgr.tankD,x,y,null);
+                break;
+            case UP:
+                g.drawImage(ResourceMgr.tankU,x,y,null);
+                break;
+        }
+
+        move();
     }
 
     private void move() {
@@ -79,11 +99,13 @@ public class Tank {
                 break;
             default:
                 break;
-
         }
     }
 
     public void fire() {
-        tf.bullet = new Bullet(this.x, this.y, this.dir);
+        //只要按下control键就会有子弹
+        int bx=this.x +Tank.WIDTH/2-Bullet.WIDTH/2;
+        int by=this.y+Tank.WIDTH/2-Bullet.HEIGHT/2;
+        tf.bulletList.add (new Bullet(bx,by , this.dir,tf));
     }
 }

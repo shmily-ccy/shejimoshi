@@ -5,23 +5,30 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+
 /*
 弹出一个窗框
  */
 public class TankFrame extends Frame {
+
+    static final int GAME_WIDTH=800,GAME_HEIGHT=600;
 
 //    int x=200,y=200;
 //    Dir dir=Dir.DOWN;
 //    final int SPEED=10;
     //主站坦克
     Tank myTank=new Tank(200,200,Dir.DOWN,this);//坦克的起始位置,以及方向
-    Bullet bullet=new Bullet(300,300,Dir.DOWN);//将子弹显示到窗口中
+    //Bullet bullet=new Bullet(300,300,Dir.DOWN);//将子弹显示到窗口中
+    java.util.List<Bullet> bulletList=new ArrayList<>();
 
     /**
      * 窗口属性
      */
     public TankFrame(){
-        setSize(800,600);
+        setSize(GAME_WIDTH,GAME_HEIGHT);
         setResizable(false);
         setTitle("tank war");
         setVisible(true);
@@ -42,8 +49,17 @@ public class TankFrame extends Frame {
     @Override
     public void paint(Graphics g) {
         //画笔交给tank,由坦克自己去画自己
+        g.drawString("子弹的数量"+bulletList.size(),10,60);
         myTank.paint(g);
-        bullet.paint(g);
+        //第一次用foreach循环的时候,我们在bullet中进行了删除操作,会报错,是因为迭代器的原因
+        for (int i = 0; i < bulletList.size(); i++) {
+            bulletList.get(i).paint(g);
+        }
+      /*  Iterator<Bullet> iterator = bulletList.iterator();
+        while (iterator.hasNext()){
+            Bullet next = iterator.next();
+            if(!next.isLive()) iterator.remove();
+        }*/
         //每次最小化窗口,就会进行移动,所以需要不断的调用这个方法(刷新)
 //        g.fillRect(x,y,50,50);
 //        switch (dir){
@@ -95,7 +111,6 @@ public class TankFrame extends Frame {
                     break;
                 default:
                     break;
-
             }
             setMainTankDir();
         }
