@@ -7,6 +7,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 
 /*
@@ -16,13 +17,10 @@ public class TankFrame extends Frame {
 
     static final int GAME_WIDTH=800,GAME_HEIGHT=600;
 
-//    int x=200,y=200;
-//    Dir dir=Dir.DOWN;
-//    final int SPEED=10;
-    //主站坦克
-    Tank myTank=new Tank(200,200,Dir.DOWN,this);//坦克的起始位置,以及方向
-    //Bullet bullet=new Bullet(300,300,Dir.DOWN);//将子弹显示到窗口中
+    //主战坦克
+    Tank myTank=new Tank(200,400,Dir.DOWN,this);//坦克的起始位置,以及方向
     java.util.List<Bullet> bulletList=new ArrayList<>();
+    List<Tank> tanks=new ArrayList<>();
 
     /**
      * 窗口属性
@@ -49,36 +47,25 @@ public class TankFrame extends Frame {
     @Override
     public void paint(Graphics g) {
         //画笔交给tank,由坦克自己去画自己
+        //数量都为0的时候,说明不存在内存溢出
         g.drawString("子弹的数量"+bulletList.size(),10,60);
+        g.drawString("敌人的数量"+tanks.size(),10,80);
         myTank.paint(g);
         //第一次用foreach循环的时候,我们在bullet中进行了删除操作,会报错,是因为迭代器的原因
         for (int i = 0; i < bulletList.size(); i++) {
             bulletList.get(i).paint(g);
         }
-      /*  Iterator<Bullet> iterator = bulletList.iterator();
-        while (iterator.hasNext()){
-            Bullet next = iterator.next();
-            if(!next.isLive()) iterator.remove();
-        }*/
-        //每次最小化窗口,就会进行移动,所以需要不断的调用这个方法(刷新)
-//        g.fillRect(x,y,50,50);
-//        switch (dir){
-//            case LEFT:
-//                x-=SPEED;
-//                break;
-//            case RIGHT:
-//                x+=SPEED;
-//                break;
-//            case UP:
-//                y-=SPEED;
-//                break;
-//            case DOWN:
-//                y+=SPEED;
-//                break;
-//            default:
-//                break;
-//
-//        }
+        //画敌人坦克
+        for (int i = 0; i < tanks.size(); i++) {
+            tanks.get(i).paint(g);
+        }
+
+        for (int i = 0; i < bulletList.size(); i++) {
+            for (int j = 0; j < tanks.size(); j++) {
+                //每一个子弹都要和坦克碰撞
+                bulletList.get(i).collideWith(tanks.get(j));
+            }
+        }
     }
 
     /**
@@ -90,11 +77,12 @@ public class TankFrame extends Frame {
         boolean bR=false;
         boolean bD=false;
 
+        /**
+         * 键盘按下的时候系统自动调用
+         * @param e
+         */
         @Override
         public void keyPressed(KeyEvent e) {
-            //键按下的时候自动调用
-//            System.out.println("key press");
-            //x+=200;
             int keyCode = e.getKeyCode();
             switch(keyCode){
                 case KeyEvent.VK_LEFT:
@@ -129,9 +117,12 @@ public class TankFrame extends Frame {
             }
         }
 
+        /**
+         * 键盘抬起的时候系统自动调用
+         * @param e
+         */
         @Override
         public void keyReleased(KeyEvent e) {
-            //抬起的时候调用
             int keyCode = e.getKeyCode();
             switch(keyCode){
                 case KeyEvent.VK_LEFT:

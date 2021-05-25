@@ -14,6 +14,7 @@ public class Tank {
     private TankFrame tf;//拥有了该窗口的引用,我们在创做坦克的时候,就可以将坦克随身携带的子弹也在画面中可以画出来(持有另外一个对象的引用)
     public static int WIDTH=ResourceMgr.tankD.getWidth();
     public static int HEIGHT=ResourceMgr.tankD.getHeight();
+    boolean living=true;
     public Tank(int x, int y, Dir dir,TankFrame tf) {
         this.x = x;
         this.y = y;
@@ -60,10 +61,7 @@ public class Tank {
     public void paint(Graphics g) {
         //改成画图片,而不是方块
         //ImageObserver是一个监听者,画进来的时候有事件发生
-       // g.drawImage(ResourceMgr.tankL,x,y,null);
-//        g.fillRect(x,y,50,50);
-       // move();
-
+        if(!living) tf.tanks.remove(this);//死了需要移除,不然坦克还会占内存,造成内存溢出
         switch (dir){
             case LEFT:
                 g.drawImage(ResourceMgr.tankL,x,y,null);
@@ -107,5 +105,9 @@ public class Tank {
         int bx=this.x +Tank.WIDTH/2-Bullet.WIDTH/2;
         int by=this.y+Tank.WIDTH/2-Bullet.HEIGHT/2;
         tf.bulletList.add (new Bullet(bx,by , this.dir,tf));
+    }
+
+    public void die() {
+        this.living=false;
     }
 }

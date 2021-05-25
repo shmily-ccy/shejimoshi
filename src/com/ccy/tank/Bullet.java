@@ -11,7 +11,7 @@ public class Bullet {
     public static int WIDTH=ResourceMgr.bulletD.getWidth();
     public static int HEIGHT=ResourceMgr.bulletD.getHeight();//子弹的大小,宽度和高度
     private Dir dir;//子弹方向
-    private boolean live=true;//活或者死
+    private boolean living=true;//活或者死
     private TankFrame tf;
 
     public Bullet(int x, int y, Dir dir,TankFrame tf) {
@@ -21,12 +21,13 @@ public class Bullet {
         this.tf=tf;
     }
 
-    public boolean isLive() {
-        return live;
+
+    public boolean isLiving() {
+        return living;
     }
 
-    public void setLive(boolean live) {
-        this.live = live;
+    public void setLiving(boolean living) {
+        this.living = living;
     }
 
     public static int getSPEED() {
@@ -60,16 +61,9 @@ public class Bullet {
      * 画出子弹自己
      */
     public void paint(Graphics g){
-        if(!live){
+        if(!living){
             tf.bulletList.remove(this);//删除已经死了的子弹,每次都会重新计算size,所以不会出现越界的问题
         }
-       /* Color c=g.getColor();
-        g.setColor(Color.RED);//画笔的颜色
-        //子弹设置成圆的
-//        g.fillOval(x,y,WIDTH,HEIGHT);
-        g.setColor(c);
-//        move();*/
-
         switch (dir){
             case LEFT:
                 g.drawImage(ResourceMgr.bulletL,x,y,Color.RED,null);
@@ -108,8 +102,24 @@ public class Bullet {
 
         }
         if(x<0 || y<0 || x>TankFrame.GAME_HEIGHT || y>TankFrame.GAME_WIDTH){
-            live=false;
+            living=false;
         }
 
+    }
+
+    public void collideWith(Tank tank) {
+        //子弹本身的矩形
+        Rectangle rectangle=new Rectangle(this.x,this.y,WIDTH,HEIGHT);
+        //坦克本身的矩形
+        Rectangle rectangle1=new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank.HEIGHT);
+        //判断两个方块是否相交
+        if(rectangle.intersects(rectangle1)){
+            tank.die();
+            this.die();
+        }
+    }
+
+    private void die() {
+        this.living=false;
     }
 }
