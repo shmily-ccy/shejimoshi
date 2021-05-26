@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -15,12 +14,13 @@ import java.util.List;
  */
 public class TankFrame extends Frame {
 
-    static final int GAME_WIDTH=800,GAME_HEIGHT=600;
+    static final int GAME_WIDTH=1080,GAME_HEIGHT=960;
 
     //主战坦克
-    Tank myTank=new Tank(200,400,Dir.DOWN,this);//坦克的起始位置,以及方向
+    Tank myTank=new Tank(200,400,Dir.DOWN,Group.GOOD,this);//坦克的起始位置,以及方向
     java.util.List<Bullet> bulletList=new ArrayList<>();
     List<Tank> tanks=new ArrayList<>();
+    Explode explode=new Explode(100,100,this);
 
     /**
      * 窗口属性
@@ -39,6 +39,22 @@ public class TankFrame extends Frame {
             }
         });
    }
+
+    Image offScreenImage = null;
+
+    @Override
+    public void update(Graphics g) {
+        if (offScreenImage == null) {
+            offScreenImage = this.createImage(GAME_WIDTH, GAME_HEIGHT);
+        }
+        Graphics gOffScreen = offScreenImage.getGraphics();
+        Color c = gOffScreen.getColor();
+        gOffScreen.setColor(Color.BLACK);
+        gOffScreen.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        gOffScreen.setColor(c);
+        paint(gOffScreen);
+        g.drawImage(offScreenImage, 0, 0, null);
+    }
 
     /**
      * 将原来的背景全部清除一遍,然后再出现方块
@@ -66,6 +82,8 @@ public class TankFrame extends Frame {
                 bulletList.get(i).collideWith(tanks.get(j));
             }
         }
+
+        explode.paint(g);
     }
 
     /**

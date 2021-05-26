@@ -13,14 +13,23 @@ public class Bullet {
     private Dir dir;//子弹方向
     private boolean living=true;//活或者死
     private TankFrame tf;
+    private Group group=Group.BAD;
 
-    public Bullet(int x, int y, Dir dir,TankFrame tf) {
+    public Bullet(int x, int y, Dir dir,Group group,TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.tf=tf;
+        this.group=group;
     }
 
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
 
     public boolean isLiving() {
         return living;
@@ -66,16 +75,16 @@ public class Bullet {
         }
         switch (dir){
             case LEFT:
-                g.drawImage(ResourceMgr.bulletL,x,y,Color.RED,null);
+                g.drawImage(ResourceMgr.bulletL,x,y,null);
                 break;
             case RIGHT:
-                g.drawImage(ResourceMgr.bulletR,x,y,Color.RED,null);
+                g.drawImage(ResourceMgr.bulletR,x,y,null);
                 break;
             case DOWN:
-                g.drawImage(ResourceMgr.bulletD,x,y,Color.RED,null);
+                g.drawImage(ResourceMgr.bulletD,x,y,null);
                 break;
             case UP:
-                g.drawImage(ResourceMgr.bulletU,x,y,Color.RED,null);
+                g.drawImage(ResourceMgr.bulletU,x,y,null);
                 break;
         }
         move();
@@ -108,6 +117,10 @@ public class Bullet {
     }
 
     public void collideWith(Tank tank) {
+        if(this.group.equals(tank.getGroup())){
+            return;
+        }
+        //TODO:用一个rect来记录子弹的位置
         //子弹本身的矩形
         Rectangle rectangle=new Rectangle(this.x,this.y,WIDTH,HEIGHT);
         //坦克本身的矩形
