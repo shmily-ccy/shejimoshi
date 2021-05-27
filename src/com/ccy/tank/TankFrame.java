@@ -14,14 +14,14 @@ import java.util.List;
  */
 public class TankFrame extends Frame {
 
-    static final int GAME_WIDTH=1080,GAME_HEIGHT=960;
+    static final int GAME_WIDTH=1080,GAME_HEIGHT=860;
 
     //主战坦克
     Tank myTank=new Tank(200,400,Dir.DOWN,Group.GOOD,this);//坦克的起始位置,以及方向
     java.util.List<Bullet> bulletList=new ArrayList<>();
     List<Tank> tanks=new ArrayList<>();
     Explode explode=new Explode(100,100,this);
-
+    List<Explode> explodes=new ArrayList<>();
     /**
      * 窗口属性
      */
@@ -66,6 +66,7 @@ public class TankFrame extends Frame {
         //数量都为0的时候,说明不存在内存溢出
         g.drawString("子弹的数量"+bulletList.size(),10,60);
         g.drawString("敌人的数量"+tanks.size(),10,80);
+        g.drawString("爆炸的数量"+explodes.size(),10,100);
         myTank.paint(g);
         //第一次用foreach循环的时候,我们在bullet中进行了删除操作,会报错,是因为迭代器的原因
         for (int i = 0; i < bulletList.size(); i++) {
@@ -75,6 +76,10 @@ public class TankFrame extends Frame {
         for (int i = 0; i < tanks.size(); i++) {
             tanks.get(i).paint(g);
         }
+        //已经画出来的,所以需要爆炸的时候,往里面画就行了
+        for (int i = 0; i < explodes.size(); i++) {
+            explodes.get(i).paint(g);
+        }
 
         for (int i = 0; i < bulletList.size(); i++) {
             for (int j = 0; j < tanks.size(); j++) {
@@ -83,7 +88,6 @@ public class TankFrame extends Frame {
             }
         }
 
-        explode.paint(g);
     }
 
     /**

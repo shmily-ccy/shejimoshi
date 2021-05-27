@@ -14,6 +14,7 @@ public class Bullet {
     private boolean living=true;//活或者死
     private TankFrame tf;
     private Group group=Group.BAD;
+    Rectangle rectangle=new Rectangle();//在坦克和子弹中维护一个rectangle,方便计算碰撞的时候使用
 
     public Bullet(int x, int y, Dir dir,Group group,TankFrame tf) {
         this.x = x;
@@ -21,6 +22,12 @@ public class Bullet {
         this.dir = dir;
         this.tf=tf;
         this.group=group;
+        //在new的时候,对rectangle进行初始化
+        rectangle.x=this.x;
+        rectangle.y=this.y;
+        rectangle.width=WIDTH;
+        rectangle.height=HEIGHT;
+
     }
 
     public Group getGroup() {
@@ -87,6 +94,7 @@ public class Bullet {
                 g.drawImage(ResourceMgr.bulletU,x,y,null);
                 break;
         }
+        //子弹移动
         move();
 
     }
@@ -110,6 +118,9 @@ public class Bullet {
                 break;
 
         }
+
+        rectangle.x=this.x;
+        rectangle.y=this.y;
         if(x<0 || y<0 || x>TankFrame.GAME_HEIGHT || y>TankFrame.GAME_WIDTH){
             living=false;
         }
@@ -120,15 +131,19 @@ public class Bullet {
         if(this.group.equals(tank.getGroup())){
             return;
         }
-        //TODO:用一个rect来记录子弹的位置
+        //用一个rect来记录子弹的位置
         //子弹本身的矩形
-        Rectangle rectangle=new Rectangle(this.x,this.y,WIDTH,HEIGHT);
+        //Rectangle rectangle=new Rectangle(this.x,this.y,WIDTH,HEIGHT);
         //坦克本身的矩形
-        Rectangle rectangle1=new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank.HEIGHT);
+        //Rectangle rectangle1=new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank.HEIGHT);
         //判断两个方块是否相交
-        if(rectangle.intersects(rectangle1)){
+        if(rectangle.intersects(tank.rectangle)){
             tank.die();
             this.die();
+            //坦克死,子弹死,然后弄出爆炸的效果
+            int ex= tank.getX()+Tank.WIDTH/2-Explode.WIDTH/2;
+            int ey=tank.getY()+Tank.HEIGHT/2-Explode.HEIGHT/2;
+            tf.explodes.add(new Explode(ex,ey,tf));
         }
     }
 

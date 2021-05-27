@@ -17,13 +17,13 @@ public class Explode {
         this.x = x;
         this.y = y;
         this.tf = tf;
-        new Audio("audio/explode.wav");
+        //new Audio("audio/explode.wav");
     }
 
     public void paint(Graphics g){
         g.drawImage(ResourceMgr.explodes[step++],x,y,null);
         if(step>=ResourceMgr.explodes.length){
-            step=0;
+            tf.explodes.remove(this);
         }
     }
 }
